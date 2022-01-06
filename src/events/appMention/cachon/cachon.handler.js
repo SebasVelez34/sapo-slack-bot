@@ -3,23 +3,48 @@ const { APP_MENTION_PATTERNS } = require("../../../utils/regex");
 
 const { BOT_USER, SECONDS_IN_HALF_HOUR } = process.env;
 
-const handler = async ({ event, say, client: webClient }) => {
+const handler = async ({ event, say, client }) => {
   const { text, channel } = event;
 
   if (APP_MENTION_PATTERNS.SALUDA_A_UN_CACHON_REGEX.test(text)) {
     helper.connectRedis();
-    const CACHONES_KEY = `CACHONES:${channel}`;
+    const CACHONES_KEY = `SLACK:CACHONES:${channel}`;
+    const MORE_CACHON_KEY = `SLACK:MORE:CACHONES:${channel}`;
     const cachedCachones = await helper.getKey(CACHONES_KEY);
+    const filterdCachones = [];
+    let cachonId = "";
 
-    if (cachedCachones.length)
-      await say(`<@${helper.getRandomCachones(cachedCachones)}> ¡Cachón!`);
+    if (cachedCachones.length) {
+      cachonId = helper.getRandomCachones(cachedCachones);
+      await helper.incrementCachonScore({
+        key: MORE_CACHON_KEY,
+        increment: 1,
+        member: cachonId
+      });
+      await say(`<@${cachonId}> ¡Cachón! :cachon:`);
+    }
 
     const { members: cachones } = await helper.getCachones({
-      webClient,
+      client,
       channel
     });
 
-    const filterdCachones = cachones.filter((item) => item !== BOT_USER);
+    for (const cachon of cachones) {
+      if (cachon !== BOT_USER) {
+        filterdCachones.push(cachon);
+
+        const cachonInfo = await helper.getUserInfo({
+          client,
+          userId: cachon
+        });
+
+        await helper.setKey({
+          key: `SLACK:USER:${cachon}`,
+          data: cachonInfo,
+          options: ["NX"]
+        });
+      }
+    }
 
     await helper.setKeyEx({
       key: CACHONES_KEY,
@@ -27,12 +52,17 @@ const handler = async ({ event, say, client: webClient }) => {
       data: filterdCachones
     });
 
-    helper.closeRedis();
+    if (!cachedCachones.length) {
+      cachonId = helper.getRandomCachones(filterdCachones);
+      await helper.incrementCachonScore({
+        key: MORE_CACHON_KEY,
+        increment: 1,
+        member: cachonId
+      });
 
-    if (!cachedCachones.length)
-      return await say(
-        `<@${helper.getRandomCachones(filterdCachones)}> ¡Cachón!`
-      );
+      helper.closeRedis();
+      return await say(`<@${cachonId}> ¡Cachón! :cachon:`);
+    }
   }
 };
 
