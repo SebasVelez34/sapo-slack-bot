@@ -12,7 +12,7 @@ const handler = async ({ event, say, client }) => {
       const MORE_CACHON_KEY = `SLACK:MORE:CACHONES:${channel}`;
       const moreCachon = await helper.zRevRange({
         key: MORE_CACHON_KEY,
-        stop: top
+        stop: top - 1
       });
       helper.closeRedis();
 
