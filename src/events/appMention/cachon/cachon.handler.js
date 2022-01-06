@@ -38,8 +38,6 @@ const handler = async ({ event, say, client }) => {
           userId: cachon
         });
 
-        console.log({ cachon, cachonInfo });
-
         await helper.setKey({
           key: `SLACK:USER:${cachon}`,
           data: cachonInfo,

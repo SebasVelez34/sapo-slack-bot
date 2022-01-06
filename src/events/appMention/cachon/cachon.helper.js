@@ -7,7 +7,7 @@ const getKey = async (key) => {
 };
 
 const setKey = ({ key, data, options }) => {
-  return redis.set({ key, dat: JSON.stringify(data), options });
+  return redis.set({ key, data: JSON.stringify(data), options });
 };
 
 const setKeyEx = ({ key, seconds, data }) => {
