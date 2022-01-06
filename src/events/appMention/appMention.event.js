@@ -1,6 +1,8 @@
+const { APP_MENTION_PATTERNS } = require("../../utils/regex");
+
 const cachonHandler = require("./cachon");
 const moreCachonHandler = require("./more-cachon");
-const { APP_MENTION_PATTERNS } = require("../../utils/regex");
+const topCachonHandler = require("./top-cachones");
 
 const init = (app) => {
   if (process.env.NODE_ENV === "development") {
@@ -8,9 +10,9 @@ const init = (app) => {
   }
 
   app.event("app_mention", async (eventData) => {
-    //if (eventData.event.type === "app_mention") {
     cachonHandler(eventData);
     moreCachonHandler(eventData);
+    topCachonHandler(eventData);
 
     if (
       !Object.values(APP_MENTION_PATTERNS).some((regex) =>

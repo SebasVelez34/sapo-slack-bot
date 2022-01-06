@@ -24,8 +24,8 @@ const zincrby = ({ key, increment = 1, member }) => {
   return client.zincrby(key, increment, member);
 };
 
-const zrevrange = ({ key, start = 0, stop = 0, withscores = "WITHSCORES" }) => {
-  return client.zrevrange(key, start, stop, withscores);
+const zrevrange = ({ key, start = 0, stop = 0, options = [] }) => {
+  return client.zrevrange(key, start, stop, ...options);
 };
 
 module.exports = { set, get, setex, disconnect, connect, zincrby, zrevrange };

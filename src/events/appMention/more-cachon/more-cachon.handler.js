@@ -2,11 +2,11 @@ const helper = require("./more-cachon.helper");
 
 const { APP_MENTION_PATTERNS } = require("../../../utils/regex");
 
-const handler = async ({ event, say, client: webClient }) => {
+const handler = async ({ event, say }) => {
   try {
     const { text, channel } = event;
 
-    if (APP_MENTION_PATTERNS.QUIEN_ES_EL_MAS_CACHON.test(text)) {
+    if (APP_MENTION_PATTERNS.QUIEN_ES_EL_MAS_CACHON_REGEX.test(text)) {
       helper.connectRedis();
 
       const MORE_CACHON_KEY = `SLACK:MORE:CACHONES:${channel}`;
