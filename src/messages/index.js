@@ -8,8 +8,6 @@ const init = (app) => {
   helloMessage(app);
 
   app.message(":wave:", async ({ message, say }) => {
-    console.log({ message, say });
-
     await say(`Hello, <@${message.user}>`);
   });
 };
