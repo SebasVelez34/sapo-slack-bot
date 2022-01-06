@@ -1,7 +1,5 @@
 const init = (app) => {
   app.action("button_click_hello", async (data) => {
-    console.log(data);
-
     await ack();
 
     if (say) return await say(`<@${body.user.id}> clicked the button (say)`);

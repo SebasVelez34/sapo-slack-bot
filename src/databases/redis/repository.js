@@ -1,7 +1,15 @@
 const client = require("./config");
 
-const set = (key, data) => {
-  return client.set(key, data);
+const disconnect = () => {
+  if (client.status !== "end") return client.disconnect();
+};
+
+const connect = () => {
+  if (client.status !== "ready") return client.connect();
+};
+
+const set = ({ key, data, options = [] }) => {
+  return client.set(key, data, ...options);
 };
 
 const get = (key) => {
@@ -12,12 +20,12 @@ const setex = ({ key, seconds, data }) => {
   return client.setex(key, seconds, data);
 };
 
-const disconnect = () => {
-  if (client.status !== "end") return client.disconnect();
+const zincrby = ({ key, increment = 1, member }) => {
+  return client.zincrby(key, increment, member);
 };
 
-const connect = () => {
-  if (client.status !== "ready") return client.connect();
+const zrevrange = ({ key, start = 0, stop = 0, withscores = "WITHSCORES" }) => {
+  return client.zrevrange(key, start, stop, withscores);
 };
 
-module.exports = { set, get, setex, disconnect, connect };
+module.exports = { set, get, setex, disconnect, connect, zincrby, zrevrange };

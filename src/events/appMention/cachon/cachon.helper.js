@@ -6,8 +6,8 @@ const getKey = async (key) => {
   return JSON.parse(result || '""');
 };
 
-const setKey = (key, data) => {
-  return redis.set(key, JSON.stringify(data));
+const setKey = ({ key, data, options }) => {
+  return redis.set({ key, dat: JSON.stringify(data), options });
 };
 
 const setKeyEx = ({ key, seconds, data }) => {
@@ -22,14 +22,22 @@ const connectRedis = () => {
   return redis.connect();
 };
 
-const getCachones = ({ webClient, channel }) => {
-  return webClient.conversations.members({
+const getCachones = ({ client, channel }) => {
+  return client.conversations.members({
     channel
   });
 };
 
+const getUserInfo = ({ client, userId }) => {
+  return client.users.info({ user: userId });
+};
+
 const getRandomCachones = (items) => {
   return getRandomItem(items);
+};
+
+const incrementCachonScore = ({ key, increment, member }) => {
+  return redis.zincrby({ key, increment, member });
 };
 
 module.exports = {
@@ -39,5 +47,7 @@ module.exports = {
   getCachones,
   getRandomCachones,
   closeRedis,
-  connectRedis
+  connectRedis,
+  incrementCachonScore,
+  getUserInfo
 };
