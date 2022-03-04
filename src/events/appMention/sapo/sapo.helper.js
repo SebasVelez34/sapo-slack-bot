@@ -22,7 +22,7 @@ const connectRedis = () => {
   return redis.connect();
 };
 
-const getCachones = ({ client, channel }) => {
+const getSapos = ({ client, channel }) => {
   return client.conversations.members({
     channel
   });
@@ -32,11 +32,11 @@ const getUserInfo = ({ client, userId }) => {
   return client.users.info({ user: userId });
 };
 
-const getRandomCachones = (items) => {
+const getRandomSapos = (items) => {
   return getRandomItem(items);
 };
 
-const incrementCachonScore = ({ key, increment, member }) => {
+const incrementSapoScore = ({ key, increment, member }) => {
   return redis.zincrby({ key, increment, member });
 };
 
@@ -44,10 +44,10 @@ module.exports = {
   getKey,
   setKey,
   setKeyEx,
-  getCachones,
-  getRandomCachones,
+  getSapos,
+  getRandomSapos,
   closeRedis,
   connectRedis,
-  incrementCachonScore,
+  incrementSapoScore,
   getUserInfo
 };

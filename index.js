@@ -17,6 +17,6 @@ commandsInit(app);
   await app.start(port);
 
   if (NODE_ENV === "development") {
-    console.log(`F.R.I.D.A.Y bot is running on port ${port}!`);
+    console.log(`F.R.O.G bot is running on port ${port}!`);
   }
 })();

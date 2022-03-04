@@ -13,7 +13,7 @@ const app = new App({
   //...(NODE_ENV === "development" && { logLevel: LogLevel.DEBUG })
 });
 
-console.log(receiver.app.route);
+console.log("Hooooooooooooooola",receiver.app.route);
 
 receiver.router.post("/slack/events", (req, res) => {
   console.log(req);
