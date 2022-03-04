@@ -1,11 +1,12 @@
 const helper = require("./sapo.helper");
 const { APP_MENTION_PATTERNS } = require("../../../utils/regex");
+const { CONSTANTS } = require("../../../utils/constants");
 
 const { BOT_USER, SECONDS_IN_HALF_HOUR } = process.env;
 
 const handler = async ({ event, say, client }) => {
-  const { text, channel } = event;
-
+  const { text, channel, user } = event;
+  
   if (APP_MENTION_PATTERNS.SALUDA_A_UN_SAPO_REGEX.test(text)) {
     helper.connectRedis();
     const SAPOS_KEY = `SLACK:SAPOS:${channel}`;
@@ -13,7 +14,7 @@ const handler = async ({ event, say, client }) => {
     const cachedSapos = await helper.getKey(SAPOS_KEY);
     const filterdSapos = [];
     let sapoId = "";
-
+    let botProfile = "";
     if (cachedSapos.length) {
       sapoId = helper.getRandomSapos(cachedSapos);
       await helper.incrementSapoScore({
@@ -21,7 +22,12 @@ const handler = async ({ event, say, client }) => {
         increment: 1,
         member: sapoId
       });
-      await say(`<@${sapoId}> ¡Sapo! :sapo-perro:`);
+      if(sapoId === CONSTANTS.fridayBotId){
+        await say(`<@${user}> :sapo-perro: :frog: ¡Sapooooooooooooooooooooooooo perro pasmado! :frog::sapo-perro:`);
+        await say(`<@${sapoId}> saluda a un cachón`);
+      }else{
+        await say(`<@${sapoId}> ¡Sapo! :sapo-perro:`);
+      }
     }
 
     const { members: sapos } = await helper.getSapos({

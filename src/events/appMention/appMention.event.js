@@ -1,4 +1,5 @@
 const { APP_MENTION_PATTERNS } = require("../../utils/regex");
+const { CONSTANTS } = require("../../utils/constants");
 
 const sapoHandler = require("./sapo");
 const moreSapoHandler = require("./more-sapo");
@@ -13,15 +14,18 @@ const init = (app) => {
     sapoHandler(eventData);
     moreSapoHandler(eventData);
     topSapoHandler(eventData);
-
+    console.log("eventData.event.user",eventData.event.user);
     if (
       !Object.values(APP_MENTION_PATTERNS).some((regex) =>
         regex.test(eventData.event.text)
       )
-    )
+    ){
       return await eventData.say(
-        `Sorry <@${eventData.event.user}>, I don't know what you mean :confused:`
+        `<@${eventData.event.user}> Eres tan sapo :frog: y tan cachón :cachon: que no logré entenderte. Copia bien cabeza de M@.`
       );
+    }
+  
+      
   });
 };
 

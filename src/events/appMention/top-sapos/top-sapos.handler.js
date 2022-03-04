@@ -15,7 +15,6 @@ const handler = async ({ event, say, client }) => {
         stop: top - 1
       });
       helper.closeRedis();
-
       if (moreSapo.length > 1) {
         return await say(
           `Los más sapos perros son:\n ${moreSapo
